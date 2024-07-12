@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, name, surname, country } = req.body;
     try {
         let user = await User.authUser(username);
         if (user.length > 0) {
@@ -13,11 +13,11 @@ exports.register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        await User.createUser(username, email, hashedPassword);
+        await User.createUser(username, hashedPassword, email, name, surname, country, 'user', null, new Date(), 0);
 
         const payload = { user: { username } };
 
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
             if (err) throw err;
             res.json({ token });
         });
@@ -42,7 +42,7 @@ exports.login = async (req, res) => {
 
         const payload = { user: { username: user[0].username } };
 
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
             if (err) throw err;
             res.json({ token });
         });

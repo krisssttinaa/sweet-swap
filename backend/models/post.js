@@ -1,16 +1,31 @@
-module.exports = (sequelize, DataTypes) => {
-    const Post = sequelize.define('Post', {
-        post_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-        user_id: { type: DataTypes.INTEGER, allowNull: false },
-        recipe_id: { type: DataTypes.INTEGER, allowNull: false },
-        content: { type: DataTypes.TEXT, allowNull: false },
-        date_posted: { type: DataTypes.DATE, allowNull: false },
+const conn = require('../config/db');
+const dataPool = {};
+
+dataPool.getAllPosts = () => {
+    return new Promise((resolve, reject) => {
+        conn.query(`SELECT * FROM posts`, (err, res) => {
+            if (err) return reject(err);
+            return resolve(res);
+        });
     });
-
-    Post.associate = models => {
-        Post.belongsTo(models.User, { foreignKey: 'user_id' });
-        Post.belongsTo(models.Recipe, { foreignKey: 'recipe_id' });
-    };
-
-    return Post;
 };
+
+dataPool.getPostById = (id) => {
+    return new Promise((resolve, reject) => {
+        conn.query(`SELECT * FROM posts WHERE post_id = ?`, [id], (err, res) => {
+            if (err) return reject(err);
+            return resolve(res);
+        });
+    });
+};
+
+dataPool.createPost = (user_id, recipe_id, content, date_posted) => {
+    return new Promise((resolve, reject) => {
+        conn.query(`INSERT INTO posts (user_id, recipe_id, content, date_posted) VALUES (?, ?, ?, ?)`, [user_id, recipe_id, content, date_posted], (err, res) => {
+            if (err) return reject(err);
+            return resolve(res);
+        });
+    });
+};
+
+module.exports = dataPool;

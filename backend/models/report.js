@@ -1,16 +1,31 @@
-module.exports = (sequelize, DataTypes) => {
-    const Report = sequelize.define('Report', {
-        report_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-        user_id: { type: DataTypes.INTEGER, allowNull: false },
-        reported_post_id: { type: DataTypes.INTEGER, allowNull: false },
-        reason: { type: DataTypes.TEXT, allowNull: false },
-        date_reported: { type: DataTypes.DATE, allowNull: false },
+const conn = require('../config/db');
+const dataPool = {};
+
+dataPool.getAllReports = () => {
+    return new Promise((resolve, reject) => {
+        conn.query(`SELECT * FROM reports`, (err, res) => {
+            if (err) return reject(err);
+            return resolve(res);
+        });
     });
-
-    Report.associate = models => {
-        Report.belongsTo(models.User, { foreignKey: 'user_id' });
-        Report.belongsTo(models.Post, { foreignKey: 'reported_post_id' });
-    };
-
-    return Report;
 };
+
+dataPool.getReportById = (id) => {
+    return new Promise((resolve, reject) => {
+        conn.query(`SELECT * FROM reports WHERE report_id = ?`, [id], (err, res) => {
+            if (err) return reject(err);
+            return resolve(res);
+        });
+    });
+};
+
+dataPool.createReport = (user_id, post_id, reason, date_reported) => {
+    return new Promise((resolve, reject) => {
+        conn.query(`INSERT INTO reports (user_id, post_id, reason, date_reported) VALUES (?, ?, ?, ?)`, [user_id, post_id, reason, date_reported], (err, res) => {
+            if (err) return reject(err);
+            return resolve(res);
+        });
+    });
+};
+
+module.exports = dataPool;

@@ -1,4 +1,5 @@
 const conn = require('../config/db');
+
 const dataPool = {};
 
 dataPool.getAllUsers = () => {
@@ -19,9 +20,9 @@ dataPool.getUserById = (id) => {
     });
 };
 
-dataPool.createUser = (username, email, password) => {
+dataPool.createUser = (username, password, email, name, surname, country, role, dietary_goals, registration_date, amount_achievements) => {
     return new Promise((resolve, reject) => {
-        conn.query(`INSERT INTO users (username, email, password) VALUES (?, ?, ?)`, [username, email, password], (err, res) => {
+        conn.query(`INSERT INTO users (username, password, email, name, surname, country, role, dietary_goals, registration_date, amount_achievements) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [username, password, email, name, surname, country, role, dietary_goals, registration_date, amount_achievements], (err, res) => {
             if (err) return reject(err);
             return resolve(res);
         });

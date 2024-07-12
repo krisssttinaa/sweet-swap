@@ -1,10 +1,31 @@
-module.exports = (sequelize, DataTypes) => {
-    const Product = sequelize.define('Product', {
-        product_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-        product_name: { type: DataTypes.STRING, allowNull: false },
-        description: { type: DataTypes.TEXT, allowNull: true },
-        price: { type: DataTypes.DECIMAL(10, 0), allowNull: false },
-    });
+const conn = require('../config/db');
+const dataPool = {};
 
-    return Product;
+dataPool.getAllProducts = () => {
+    return new Promise((resolve, reject) => {
+        conn.query(`SELECT * FROM products`, (err, res) => {
+            if (err) return reject(err);
+            return resolve(res);
+        });
+    });
 };
+
+dataPool.getProductById = (id) => {
+    return new Promise((resolve, reject) => {
+        conn.query(`SELECT * FROM products WHERE product_id = ?`, [id], (err, res) => {
+            if (err) return reject(err);
+            return resolve(res);
+        });
+    });
+};
+
+dataPool.createProduct = (product_name, description, price) => {
+    return new Promise((resolve, reject) => {
+        conn.query(`INSERT INTO products (product_name, description, price) VALUES (?, ?, ?)`, [product_name, description, price], (err, res) => {
+            if (err) return reject(err);
+            return resolve(res);
+        });
+    });
+};
+
+module.exports = dataPool;
