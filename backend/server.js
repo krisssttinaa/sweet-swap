@@ -11,8 +11,25 @@ const app = express();
 app.use(express.json());
 
 // Routes
-const routes = require('./routes');
-app.use('/api', routes);
+const indexRoutes = require('./routes/index');
+const userRoutes = require('./routes/userRoutes');
+const achievementRoutes = require('./routes/achievementRoutes');
+const commentRoutes = require('./routes/commentRoutes');
+const messageRoutes = require('./routes/messageRoutes');
+const postRoutes = require('./routes/postRoutes');
+const productRoutes = require('./routes/productRoutes');
+const recipeRoutes = require('./routes/recipeRoutes');
+const reportRoutes = require('./routes/reportRoutes');
+
+app.use('/api', indexRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/achievements', achievementRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/recipes', recipeRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -14,5 +14,4 @@ conn.connect((err) => {
     }
     console.log('CONNECTION IS ESTABLISHED');
 });
-
 module.exports = conn;
