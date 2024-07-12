@@ -1,15 +1,30 @@
 const express = require('express');
+const path = require('path');
 require('dotenv').config();
-const db = require('./db.js'); // Import the database connection
+
+const port = process.env.PORT || 8188;
+const connectDB = require('./config/db');
 
 const app = express();
-const port = process.env.PORT || 8211;
 
-app.get("/", (req, res) => {
-    res.send("hola");
+// Middleware
+app.use(express.json());
+
+// Routes
+const routes = require('./routes');
+app.use('/api', routes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.json({
+        error: {
+            message: err.message
+        }
+    });
 });
 
-/// App listening on port
-app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
+app.listen(port, (err) => {
+    if (err) console.log(err);
+    console.log(`Server started on port ${port}`);
 });
