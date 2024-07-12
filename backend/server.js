@@ -1,10 +1,15 @@
-const http = require('http');
-const app = require('./app'); // Import the configured app from app.js
+const express = require('express');
+require('dotenv').config();
+const db = require('./db.js'); // Import the database connection
 
-const port = process.env.PORT || 8188;
+const app = express();
+const port = process.env.PORT || 8211;
 
-const server = http.createServer(app);
+app.get("/", (req, res) => {
+    res.send("hola");
+});
 
-server.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+/// App listening on port
+app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
 });
