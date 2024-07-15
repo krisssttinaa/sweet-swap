@@ -12,8 +12,7 @@ app.use('/api', routes); // Use the routes defined in your routes directory
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.json({
+    res.status(err.status || 500).json({
         error: {
             message: err.message
         }
