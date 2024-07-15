@@ -21,10 +21,10 @@ exports.getRecipeById = async (req, res) => {
 };
 
 exports.createRecipe = async (req, res) => {
-    const { user_id, title, product_id, ingredients, instructions, date_created } = req.body;
+    const recipeData = req.body;
     try {
-        const newRecipe = await Recipe.createRecipe(user_id, title, product_id, ingredients, instructions, date_created);
-        res.json(newRecipe);
+        const result = await Recipe.createRecipe(recipeData);
+        res.status(201).json({ id: result.insertId });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

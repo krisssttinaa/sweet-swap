@@ -21,10 +21,10 @@ exports.getAchievementById = async (req, res) => {
 };
 
 exports.createAchievement = async (req, res) => {
-    const { user_id, achievement_name, description, date_achieved } = req.body;
+    const achievementData = req.body;
     try {
-        const newAchievement = await Achievement.createAchievement(user_id, achievement_name, description, date_achieved);
-        res.json(newAchievement);
+        const result = await Achievement.createAchievement(achievementData);
+        res.status(201).json({ id: result.insertId });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

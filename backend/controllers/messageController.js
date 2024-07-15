@@ -21,10 +21,10 @@ exports.getMessageById = async (req, res) => {
 };
 
 exports.createMessage = async (req, res) => {
-    const { sender_id, receiver_id, content, date_sent } = req.body;
+    const messageData = req.body;
     try {
-        const newMessage = await Message.createMessage(sender_id, receiver_id, content, date_sent);
-        res.json(newMessage);
+        const result = await Message.createMessage(messageData);
+        res.status(201).json({ id: result.insertId });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

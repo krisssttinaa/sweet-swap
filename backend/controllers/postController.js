@@ -21,10 +21,10 @@ exports.getPostById = async (req, res) => {
 };
 
 exports.createPost = async (req, res) => {
-    const { user_id, recipe_id, content, date_posted } = req.body;
+    const postData = req.body;
     try {
-        const newPost = await Post.createPost(user_id, recipe_id, content, date_posted);
-        res.json(newPost);
+        const result = await Post.createPost(postData);
+        res.status(201).json({ id: result.insertId });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

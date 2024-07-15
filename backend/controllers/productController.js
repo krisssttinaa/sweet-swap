@@ -21,10 +21,10 @@ exports.getProductById = async (req, res) => {
 };
 
 exports.createProduct = async (req, res) => {
-    const { product_name, description, price } = req.body;
+    const productData = req.body;
     try {
-        const newProduct = await Product.createProduct(product_name, description, price);
-        res.json(newProduct);
+        const result = await Product.createProduct(productData);
+        res.status(201).json({ id: result.insertId });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

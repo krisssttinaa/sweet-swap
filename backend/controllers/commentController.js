@@ -21,10 +21,10 @@ exports.getCommentById = async (req, res) => {
 };
 
 exports.createComment = async (req, res) => {
-    const { post_id, user_id, content, date_commented } = req.body;
+    const commentData = req.body;
     try {
-        const newComment = await Comment.createComment(post_id, user_id, content, date_commented);
-        res.json(newComment);
+        const result = await Comment.createComment(commentData);
+        res.status(201).json({ id: result.insertId });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

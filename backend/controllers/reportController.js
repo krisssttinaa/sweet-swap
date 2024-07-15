@@ -21,10 +21,10 @@ exports.getReportById = async (req, res) => {
 };
 
 exports.createReport = async (req, res) => {
-    const { user_id, reported_post_id, reason, date_reported } = req.body;
+    const reportData = req.body;
     try {
-        const newReport = await Report.createReport(user_id, reported_post_id, reason, date_reported);
-        res.json(newReport);
+        const result = await Report.createReport(reportData);
+        res.status(201).json({ id: result.insertId });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
