@@ -13,7 +13,18 @@ exports.register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        await User.createUser(username, hashedPassword, email, name, surname, country, 'user', null, new Date(), 0);
+        await User.createUser({
+            username, 
+            password: hashedPassword, 
+            email, 
+            name, 
+            surname, 
+            country, 
+            role: 'user', 
+            dietary_goals: null, 
+            registration_date: new Date(), 
+            amount_achievements: 0
+        });
 
         const payload = { user: { username } };
 

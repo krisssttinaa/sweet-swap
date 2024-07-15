@@ -1,41 +1,58 @@
 const conn = require('../config/db');
 
-const dataPool = {};
+const User = {};
 
-dataPool.getAllUsers = () => {
+User.getAllUsers = () => {
     return new Promise((resolve, reject) => {
-        conn.query(`SELECT * FROM users`, (err, res) => {
-            if (err) return reject(err);
+        conn.query('SELECT * FROM users', (err, res) => {
+            if (err) {
+                console.error('Error fetching all users:', err);
+                return reject(err);
+            }
             return resolve(res);
         });
     });
 };
 
-dataPool.getUserById = (id) => {
+User.getUserById = (id) => {
     return new Promise((resolve, reject) => {
-        conn.query(`SELECT * FROM users WHERE user_id = ?`, [id], (err, res) => {
-            if (err) return reject(err);
+        conn.query('SELECT * FROM users WHERE user_id = ?', [id], (err, res) => {
+            if (err) {
+                console.error(`Error fetching user with ID ${id}:`, err);
+                return reject(err);
+            }
             return resolve(res);
         });
     });
 };
 
-dataPool.createUser = (username, password, email, name, surname, country, role, dietary_goals, registration_date, amount_achievements) => {
+User.createUser = (userData) => {
+    const { username, password, email, name, surname, country, role, dietary_goals, registration_date, amount_achievements } = userData;
     return new Promise((resolve, reject) => {
-        conn.query(`INSERT INTO users (username, password, email, name, surname, country, role, dietary_goals, registration_date, amount_achievements) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [username, password, email, name, surname, country, role, dietary_goals, registration_date, amount_achievements], (err, res) => {
-            if (err) return reject(err);
+        conn.query(
+            'INSERT INTO users (username, password, email, name, surname, country, role, dietary_goals, registration_date, amount_achievements) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [username, password, email, name, surname, country, role, dietary_goals, registration_date, amount_achievements],
+            (err, res) => {
+                if (err) {
+                    console.error('Error creating user:', err);
+                    return reject(err);
+                }
+                return resolve(res);
+            }
+        );
+    });
+};
+
+User.authUser = (username) => {
+    return new Promise((resolve, reject) => {
+        conn.query('SELECT * FROM users WHERE username = ?', [username], (err, res) => {
+            if (err) {
+                console.error(`Error authenticating user ${username}:`, err);
+                return reject(err);
+            }
             return resolve(res);
         });
     });
 };
 
-dataPool.authUser = (username) => {
-    return new Promise((resolve, reject) => {
-        conn.query(`SELECT * FROM users WHERE username = ?`, [username], (err, res) => {
-            if (err) return reject(err);
-            return resolve(res);
-        });
-    });
-};
-
-module.exports = dataPool;
+module.exports = User;
