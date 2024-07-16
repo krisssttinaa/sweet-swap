@@ -16,11 +16,14 @@ User.getAllUsers = () => {
 
 User.getUserById = (id) => {
     return new Promise((resolve, reject) => {
-        conn.query('SELECT * FROM User WHERE user_id = ?', [id], (err, res) => {
+        const query = 'SELECT * FROM User WHERE user_id = ?';
+        //console.log(`Executing query: ${query} with ID: ${id}`);
+        conn.query(query, [id], (err, res) => {
             if (err) {
                 console.error(`Error fetching user with ID ${id}:`, err);
                 return reject(err);
             }
+            //console.log(`Query result for user with ID ${id}:`, res);
             return resolve(res);
         });
     });
@@ -45,7 +48,7 @@ User.createUser = (userData) => {
 
 User.authUser = (username) => {
     return new Promise((resolve, reject) => {
-        conn.query('SELECT * FROM users WHERE username = ?', [username], (err, res) => {
+        conn.query('SELECT * FROM User WHERE username = ?', [username], (err, res) => {
             if (err) {
                 console.error(`Error authenticating user ${username}:`, err);
                 return reject(err);

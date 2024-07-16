@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controllers/userController'); // Ensure this path is correct
 
 router.use('/users', require('./userRoutes'));
 router.use('/reports', require('./reportRoutes'));
