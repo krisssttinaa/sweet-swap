@@ -43,4 +43,16 @@ Comment.createComment = (commentData) => {
     });
 };
 
+Comment.deleteComment = (id) => {
+    return new Promise((resolve, reject) => {
+        conn.query('DELETE FROM Comment WHERE comment_id = ?', [id], (err, res) => {
+            if (err) {
+                console.error(`Error deleting comment with ID ${id}:`, err);
+                return reject(err);
+            }
+            return resolve(res);
+        });
+    });
+};
+
 module.exports = Comment;

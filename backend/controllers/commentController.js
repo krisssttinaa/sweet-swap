@@ -13,7 +13,10 @@ exports.getAllComments = async (req, res) => {
 exports.getCommentById = async (req, res) => {
     try {
         const comment = await Comment.getCommentById(req.params.id);
-        res.json(comment);
+        if (!comment.length) {
+            return res.status(404).json({ msg: 'Comment not found' });
+        }
+        res.json(comment[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -21,10 +24,25 @@ exports.getCommentById = async (req, res) => {
 };
 
 exports.createComment = async (req, res) => {
-    const commentData = req.body;
+    const { post_id, user_id, content } = req.body;
     try {
-        const result = await Comment.createComment(commentData);
-        res.status(201).json({ id: result.insertId });
+        const newComment = await Comment.createComment({
+            post_id,
+            user_id,
+            content,
+            date_commented: new Date()
+        });
+        res.json(newComment);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+};
+
+exports.deleteComment = async (req, res) => {
+    try {
+        await Comment.deleteComment(req.params.id);
+        res.json({ msg: 'Comment deleted' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

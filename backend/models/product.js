@@ -43,4 +43,16 @@ Product.createProduct = (productData) => {
     });
 };
 
+Product.deleteProduct = (id) => {
+    return new Promise((resolve, reject) => {
+        conn.query('DELETE FROM Product WHERE product_id = ?', [id], (err, res) => {
+            if (err) {
+                console.error(`Error deleting product with ID ${id}:`, err);
+                return reject(err);
+            }
+            return resolve(res);
+        });
+    });
+};
+
 module.exports = Product;

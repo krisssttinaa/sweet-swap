@@ -43,4 +43,16 @@ Post.createPost = (postData) => {
     });
 };
 
+Post.deletePost = (id) => {
+    return new Promise((resolve, reject) => {
+        conn.query('DELETE FROM Post WHERE post_id = ?', [id], (err, res) => {
+            if (err) {
+                console.error(`Error deleting post with ID ${id}:`, err);
+                return reject(err);
+            }
+            return resolve(res);
+        });
+    });
+};
+
 module.exports = Post;

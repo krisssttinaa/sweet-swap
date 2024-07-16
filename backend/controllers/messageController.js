@@ -13,7 +13,10 @@ exports.getAllMessages = async (req, res) => {
 exports.getMessageById = async (req, res) => {
     try {
         const message = await Message.getMessageById(req.params.id);
-        res.json(message);
+        if (!message.length) {
+            return res.status(404).json({ msg: 'Message not found' });
+        }
+        res.json(message[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -21,10 +24,25 @@ exports.getMessageById = async (req, res) => {
 };
 
 exports.createMessage = async (req, res) => {
-    const messageData = req.body;
+    const { sender_id, receiver_id, content } = req.body;
     try {
-        const result = await Message.createMessage(messageData);
-        res.status(201).json({ id: result.insertId });
+        const newMessage = await Message.createMessage({
+            sender_id,
+            receiver_id,
+            content,
+            date_sent: new Date()
+        });
+        res.json(newMessage);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+};
+
+exports.deleteMessage = async (req, res) => {
+    try {
+        await Message.deleteMessage(req.params.id);
+        res.json({ msg: 'Message deleted' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

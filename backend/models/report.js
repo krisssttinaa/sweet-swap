@@ -43,4 +43,16 @@ Report.createReport = (reportData) => {
     });
 };
 
+Report.deleteReport = (id) => {
+    return new Promise((resolve, reject) => {
+        conn.query('DELETE FROM Report WHERE report_id = ?', [id], (err, res) => {
+            if (err) {
+                console.error(`Error deleting report with ID ${id}:`, err);
+                return reject(err);
+            }
+            return resolve(res);
+        });
+    });
+};
+
 module.exports = Report;

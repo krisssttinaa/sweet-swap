@@ -13,7 +13,10 @@ exports.getAllPosts = async (req, res) => {
 exports.getPostById = async (req, res) => {
     try {
         const post = await Post.getPostById(req.params.id);
-        res.json(post);
+        if (!post.length) {
+            return res.status(404).json({ msg: 'Post not found' });
+        }
+        res.json(post[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -21,10 +24,25 @@ exports.getPostById = async (req, res) => {
 };
 
 exports.createPost = async (req, res) => {
-    const postData = req.body;
+    const { user_id, recipe_id, content } = req.body;
     try {
-        const result = await Post.createPost(postData);
-        res.status(201).json({ id: result.insertId });
+        const newPost = await Post.createPost({
+            user_id,
+            recipe_id,
+            content,
+            date_posted: new Date()
+        });
+        res.json(newPost);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+};
+
+exports.deletePost = async (req, res) => {
+    try {
+        await Post.deletePost(req.params.id);
+        res.json({ msg: 'Post deleted' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

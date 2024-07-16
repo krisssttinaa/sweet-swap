@@ -43,4 +43,16 @@ Message.createMessage = (messageData) => {
     });
 };
 
+Message.deleteMessage = (id) => {
+    return new Promise((resolve, reject) => {
+        conn.query('DELETE FROM Message WHERE message_id = ?', [id], (err, res) => {
+            if (err) {
+                console.error(`Error deleting message with ID ${id}:`, err);
+                return reject(err);
+            }
+            return resolve(res);
+        });
+    });
+};
+
 module.exports = Message;

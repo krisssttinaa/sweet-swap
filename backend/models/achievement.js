@@ -42,4 +42,16 @@ Achievement.createAchievement = (achievementData) => {
     });
 };
 
+Achievement.deleteAchievement = (id) => {
+    return new Promise((resolve, reject) => {
+        conn.query('DELETE FROM Achievement WHERE achievement_id = ?', [id], (err, res) => {
+            if (err) {
+                console.error(`Error deleting achievement with ID ${id}:`, err);
+                return reject(err);
+            }
+            return resolve(res);
+        });
+    });
+};
+
 module.exports = Achievement;
