@@ -13,7 +13,10 @@ exports.getAllReports = async (req, res) => {
 exports.getReportById = async (req, res) => {
     try {
         const report = await Report.getReportById(req.params.id);
-        res.json(report);
+        if (!report.length) {
+            return res.status(404).json({ msg: 'Report not found' });
+        }
+        res.json(report[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -21,10 +24,25 @@ exports.getReportById = async (req, res) => {
 };
 
 exports.createReport = async (req, res) => {
-    const reportData = req.body;
+    const { user_id, reported_post_id, reason } = req.body;
     try {
-        const result = await Report.createReport(reportData);
-        res.status(201).json({ id: result.insertId });
+        const newReport = await Report.createReport({
+            user_id,
+            reported_post_id,
+            reason,
+            date_reported: new Date()
+        });
+        res.json(newReport);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+};
+
+exports.deleteReport = async (req, res) => {
+    try {
+        await Report.deleteReport(req.params.id);
+        res.json({ msg: 'Report deleted' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controllers/userController');
 
 router.use('/users', require('./userRoutes'));
 router.use('/reports', require('./reportRoutes'));
@@ -9,5 +10,6 @@ router.use('/posts', require('./postRoutes'));
 router.use('/messages', require('./messageRoutes'));
 router.use('/comments', require('./commentRoutes'));
 router.use('/achievements', require('./achievementRoutes'));
+router.post('/register', userController.register);
 
 module.exports = router;

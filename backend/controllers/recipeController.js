@@ -13,7 +13,10 @@ exports.getAllRecipes = async (req, res) => {
 exports.getRecipeById = async (req, res) => {
     try {
         const recipe = await Recipe.getRecipeById(req.params.id);
-        res.json(recipe);
+        if (!recipe.length) {
+            return res.status(404).json({ msg: 'Recipe not found' });
+        }
+        res.json(recipe[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -21,10 +24,26 @@ exports.getRecipeById = async (req, res) => {
 };
 
 exports.createRecipe = async (req, res) => {
-    const recipeData = req.body;
+    const { user_id, title, product_id, instructions } = req.body;
     try {
-        const result = await Recipe.createRecipe(recipeData);
-        res.status(201).json({ id: result.insertId });
+        const newRecipe = await Recipe.createRecipe({
+            user_id,
+            title,
+            product_id,
+            instructions,
+            date_created: new Date()
+        });
+        res.json(newRecipe);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+};
+
+exports.deleteRecipe = async (req, res) => {
+    try {
+        await Recipe.deleteRecipe(req.params.id);
+        res.json({ msg: 'Recipe deleted' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
