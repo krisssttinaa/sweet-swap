@@ -21,7 +21,10 @@ Post.getPostById = (id) => {
                 console.error(`Error fetching post with ID ${id}:`, err);
                 return reject(err);
             }
-            return resolve(res);
+            if (res.length === 0) {
+                return resolve(null);
+            }
+            return resolve(res[0]);
         });
     });
 };
@@ -48,6 +51,20 @@ Post.deletePost = (id) => {
         conn.query('DELETE FROM Post WHERE post_id = ?', [id], (err, res) => {
             if (err) {
                 console.error(`Error deleting post with ID ${id}:`, err);
+                return reject(err);
+            }
+            return resolve(res);
+        });
+    });
+};
+
+Post.searchPosts = (keyword) => {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM Post WHERE content LIKE ?';
+        const values = [`%${keyword}%`];
+        conn.query(query, values, (err, res) => {
+            if (err) {
+                console.error(`Error searching posts with keyword ${keyword}:`, err);
                 return reject(err);
             }
             return resolve(res);

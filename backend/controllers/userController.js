@@ -13,8 +13,6 @@ exports.register = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        //console.log('Registering user:', { username, hashedPassword });
-
         await User.createUser({
             username,
             password: hashedPassword,
@@ -35,7 +33,7 @@ exports.register = async (req, res) => {
             res.json({ token });
         });
     } catch (err) {
-        console.error(err.message);
+        console.error('Error registering user:', err.message);
         res.status(500).send('Server error');
     }
 };
@@ -61,19 +59,20 @@ exports.login = async (req, res) => {
         res.json({ token });
       });
     } catch (err) {
-      console.error(err.message);
+      console.error('Error logging in:', err.message);
       res.status(500).send('Server error');
     }
-  };
+};
 
 exports.profile = async (req, res) => {
     try {
-        //console.log(`Fetching profile for user ID: ${req.user.id}`);
         const user = await User.getUserById(req.user.id);
-        //console.log(`User profile data:`, user);
-        res.json(user);
+        if (!user.length) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+        res.json(user[0]);
     } catch (err) {
-        console.error(err.message);
+        console.error('Error fetching profile:', err.message);
         res.status(500).send('Server error');
     }
 };
@@ -83,7 +82,7 @@ exports.getAllUsers = async (req, res) => {
         const users = await User.getAllUsers();
         res.json(users);
     } catch (err) {
-        console.error(err.message);
+        console.error('Error fetching users:', err.message);
         res.status(500).send('Server error');
     }
 };
@@ -96,7 +95,7 @@ exports.getUserById = async (req, res) => {
         }
         res.json(user[0]);
     } catch (err) {
-        console.error(err.message);
+        console.error('Error fetching user by ID:', err.message);
         res.status(500).send('Server error');
     }
 };

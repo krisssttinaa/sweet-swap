@@ -10,6 +10,6 @@ router.use('/posts', require('./postRoutes'));
 router.use('/messages', require('./messageRoutes'));
 router.use('/comments', require('./commentRoutes'));
 router.use('/achievements', require('./achievementRoutes'));
-router.post('/register', userController.register);
+router.use('/public', require('./publicRoutes'));// Public route for viewing posts
 
 module.exports = router;

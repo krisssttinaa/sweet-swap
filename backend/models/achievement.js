@@ -1,4 +1,5 @@
 const conn = require('../config/db');
+
 const Achievement = {};
 
 Achievement.getAllAchievements = () => {
