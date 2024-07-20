@@ -1,33 +1,41 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const history = useHistory();
+const Login = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
 
-  const handleLogin = async (e) => {
+  const navigate = useNavigate();
+
+  const { username, password } = formData;
+
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async e => {
     e.preventDefault();
-    try {
-      const res = await axios.post('http://88.200.63.148:8288/api/users/login', { username, password });
-      localStorage.setItem('token', res.data.token);
-      history.push('/profile');
-    } catch (err) {
-      console.error(err);
-    }
+    // Add your login logic here, such as an API call
+    // On successful login, navigate to another page, for example:
+    navigate('/profile');
   };
 
   return (
     <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+      <h1>Login</h1>
+      <form onSubmit={onSubmit}>
+        <div>
+          <label>Username</label>
+          <input type="text" name="username" value={username} onChange={onChange} required />
+        </div>
+        <div>
+          <label>Password</label>
+          <input type="password" name="password" value={password} onChange={onChange} required />
+        </div>
         <button type="submit">Login</button>
       </form>
     </div>
   );
-}
+};
 
 export default Login;
