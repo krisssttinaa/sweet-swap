@@ -9,14 +9,15 @@ import AchievementList from './pages/AchievementList';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import Contact from './pages/Contact';
 import Header from './components/Header';
+import Footer from './components/Footer';
+import Contact from './pages/Contact';
 
 const AppRouter = () => (
   <Router>
     <Header />
     <Routes>
-      <Route exact path="/" element={<Home />} />
+      <Route path="/" element={<Home />} />
       <Route path="/recipes" element={<RecipeList />} />
       <Route path="/recipe/:id" element={<RecipeDetails />} />
       <Route path="/add-recipe" element={<AddRecipe />} />
@@ -27,6 +28,7 @@ const AppRouter = () => (
       <Route path="/profile" element={<Profile />} />
       <Route path="/contact" element={<Contact />} />
     </Routes>
+    <Footer />
   </Router>
 );
 

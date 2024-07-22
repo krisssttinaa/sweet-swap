@@ -73,16 +73,6 @@ const Home = () => {
         </div>
        
       </section>
-      <div className="footer-separator"></div>
-      <footer className="home-footer">
-        <div className="social-links">
-          {/*
-          <a href="#"><i className="fab fa-facebook-f"></i></a>
-          <a href="#"><i className="fab fa-twitter"></i></a>
-          <a href="#"><i className="fab fa-google-plus-g"></i></a> */}
-        </div>
-        <p className='footer'>© 2021 Sweet Swap</p>
-      </footer>
     </div>
   );
 };

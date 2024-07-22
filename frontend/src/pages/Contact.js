@@ -29,8 +29,13 @@ const Contact = () => {
 
   return (
     <div className="contact-container">
+      <div className="contact-details">
+        <h2>Contact us</h2>
+        <p>If you have any questions about our recipes or even suggestions, don't hesitate to contact us. We are looking forward to hearing from you!</p>
+        <p>E-mail: support@gmail.com</p>
+      </div>
       <div className="contact-card">
-        <h2 className="contact-title">Contact Us</h2>
+        <h2 className="contact-title">Send us a message!</h2>
         <form className="contact-form" onSubmit={onSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name:</label>
