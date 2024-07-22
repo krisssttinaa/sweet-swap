@@ -74,6 +74,7 @@
 .home-new-recipes {
   background-color: #eef4f2;
   padding: 40px 20px;
+  margin-top: 40px;
   text-align: center;
 }
 
@@ -137,10 +138,35 @@
   border: none;
 }
 
+
+.social-links a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #4caf50;
+}
+
+.social-links a:hover {
+  color: #333;
+}
+
+
+.footer-separator {
+  border-top: 1px solid #ffffff;
+  margin-top: 20px;
+  padding: 30px;
+}
+
 .home-footer {
   text-align: center;
   padding: 10px;
-  background-color: #f1f1f1;
+  background-color: #f0f0f0;
+}
+
+.footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  color: #333;
 }
 
 .social-links a {
