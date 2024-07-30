@@ -139,6 +139,23 @@
   border: none;
 }
 
+.recipe-card button {
+  display: inline-block;
+  margin: 15px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.recipe-card button:hover {
+  background-color: #45a049;
+}
+
 
 .social-links a {
   margin: 0 10px;
@@ -149,3 +166,4 @@
 .social-links a:hover {
   color: #333;
 }
+
