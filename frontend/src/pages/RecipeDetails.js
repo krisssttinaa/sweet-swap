@@ -99,16 +99,20 @@ const RecipeDetails = () => {
         <p className='instructions-txt'>{recipe.instructions}</p>
       </div>
       <div className="menu" onClick={toggleMenu} ref={menuRef}>
-        ...
-        {menuOpen && (
-          <div className="menu-options">
-            {user && user.user_id === recipe.user_id && <div onClick={handleEdit}>Edit</div>}
-            {user && user.user_id === recipe.user_id && <div onClick={handleDelete}>Delete</div>}
-            <div onClick={handleSave}>Save</div>
-            <div onClick={handleReport}>Report</div>
-          </div>
-        )}
+      <div className="burger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
+      {menuOpen && (
+        <div className="menu-options">
+          {user && user.user_id === recipe.user_id && <div onClick={handleEdit}>Edit</div>}
+          {user && user.user_id === recipe.user_id && <div onClick={handleDelete}>Delete</div>}
+          <div onClick={handleSave}>Save</div>
+          <div onClick={handleReport}>Report</div>
+        </div>
+      )}
+</div>
     </div>
   );
 };

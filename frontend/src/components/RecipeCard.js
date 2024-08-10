@@ -54,7 +54,7 @@ const RecipeCard = ({ recipe, fetchRecipes }) => {
         <p>{recipe.instructions.substring(0, 100)}...</p>
       </div>
       <div className="menu" onClick={(e) => {e.stopPropagation(); toggleMenu();}}>
-        ...
+        ☰
         {menuOpen && (
           <div className="menu-options">
             {user && user.user_id === recipe.user_id && <div onClick={handleEdit}>Edit</div>}
