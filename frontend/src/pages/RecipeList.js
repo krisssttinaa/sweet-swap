@@ -1,42 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
+import RecipeCard from '../components/RecipeCard';
+import AddRecipe from '../components/AddRecipe';
 import './RecipeList.css';
 
 const RecipeList = ({ category }) => {
   const [recipes, setRecipes] = useState([]);
   const { category: routeCategory } = useParams();
+  const [showAddRecipe, setShowAddRecipe] = useState(false);
+
+  const fetchRecipes = useCallback(async () => {
+    try {
+      const response = await axios.get(`http://88.200.63.148:8288/api/recipes${category || routeCategory ? `/category/${category || routeCategory}` : ''}`);
+      setRecipes(response.data);
+    } catch (error) {
+      console.error('Error fetching recipes:', error);
+    }
+  }, [category, routeCategory]);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const response = await axios.get(`http://88.200.63.148:8288/api/recipes${category || routeCategory ? `/category/${category || routeCategory}` : ''}`);
-        setRecipes(response.data);
-      } catch (error) {
-        console.error('Error fetching recipes:', error);
-      }
-    };
-
     fetchRecipes();
-  }, [category, routeCategory]);
+  }, [fetchRecipes]);
 
   return (
     <div className="recipe-list">
-      <h2>{category || routeCategory ? `${category || routeCategory} Recipes` : 'All Recipes'}</h2>
+      <div className="recipe-header">
+        <h2>{category || routeCategory ? `${category || routeCategory} Recipes` : 'All Recipes'}</h2>
+        <button onClick={() => setShowAddRecipe(true)}>+ Add Recipe</button>
+      </div>
       <div className="recipes-container">
         {recipes.length > 0 ? (
           recipes.map((recipe) => (
-            <div className="recipe-card" key={recipe.recipe_id}>
-              <img src={`data:image/jpeg;base64,${Buffer.from(recipe.image.data).toString('base64')}`} alt={recipe.title} />
-              <h3>{recipe.title}</h3>
-              <p>{recipe.instructions.substring(0, 100)}...</p>
-              <Link to={`/recipe/${recipe.recipe_id}`}>View Recipe</Link>
-            </div>
+            <RecipeCard key={recipe.recipe_id} recipe={recipe} fetchRecipes={fetchRecipes} />
           ))
         ) : (
           <p>No recipes found.</p>
         )}
       </div>
+      {showAddRecipe && <AddRecipe onClose={() => setShowAddRecipe(false)} />}
     </div>
   );
 };
