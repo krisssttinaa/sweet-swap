@@ -16,12 +16,18 @@ const Login = () => {
         username,
         password
       });
-      console.log(response.data);
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
+
+      const { token, user } = response.data;
+
+      if (token && user) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user_id', user.id);
+        localStorage.setItem('username', user.username);
+        // Store other user details if necessary
         navigate('/');
       } else {
         setError('Invalid credentials');
+        console.error('No token or user data found. Please log in again.');
       }
     } catch (error) {
       console.error('Login error', error);
