@@ -23,7 +23,6 @@ const Login = () => {
         localStorage.setItem('token', token);
         localStorage.setItem('user_id', user.id);
         localStorage.setItem('username', user.username);
-        // Store other user details if necessary
         navigate('/');
       } else {
         setError('Invalid credentials');
@@ -63,6 +62,13 @@ const Login = () => {
           </div>
           <button type="submit" className="login-button">Login</button>
         </form>
+        <button 
+          type="button" 
+          className="register-link" 
+          onClick={() => navigate('/register')}
+        >
+          or Register
+        </button>
       </div>
     </div>
   );
