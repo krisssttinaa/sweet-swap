@@ -11,6 +11,7 @@ const Profile = ({ history }) => {
     surname: '',
     email: '',
     password: '',
+    dietaryGoals: '',
   });
 
   useEffect(() => {
@@ -31,6 +32,7 @@ const Profile = ({ history }) => {
           surname: response.data.surname,
           email: response.data.email,
           password: '',
+          dietaryGoals: response.data.dietary_goals || '', // Updated this line to match the backend field name
         });
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -90,6 +92,7 @@ const Profile = ({ history }) => {
       surname: user.surname,
       email: user.email,
       password: '',
+      dietaryGoals: user.dietary_goals || '', // Match backend field name
     });
     setIsEditing(false);
   };
@@ -131,6 +134,15 @@ const Profile = ({ history }) => {
             value={formData.password}
             onChange={handleInputChange}
           />
+          <label>Dietary Goals:</label>
+          <textarea
+            name="dietaryGoals"
+            value={formData.dietaryGoals}
+            onChange={handleInputChange}
+            rows="3"
+            placeholder="Enter your dietary goals"
+            className="textarea-dietary-goals"
+          />
           <div className="button-group">
             <button className="save" onClick={handleSaveClick}>Save</button>
             <button className="cancel" onClick={handleCancelClick}>Cancel</button>
@@ -141,6 +153,7 @@ const Profile = ({ history }) => {
           <p><strong>Name:</strong> {user.name}</p>
           <p><strong>Surname:</strong> {user.surname}</p>
           <p><strong>Email:</strong> {user.email}</p>
+          <p><strong>Dietary Goals:</strong> {user.dietary_goals || 'Not specified'}</p>
           <button className="edit" onClick={handleEditClick}>Edit</button>
         </div>
       )}

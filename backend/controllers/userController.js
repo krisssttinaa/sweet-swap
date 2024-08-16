@@ -5,15 +5,20 @@ const jwt = require('jsonwebtoken');
 exports.register = async (req, res) => {
     const { username, email, password, name, surname, country } = req.body;
     try {
+        console.log('Register request body:', req.body);
+
         let user = await User.authUser(username);
         if (user.length > 0) {
+            console.log('User already exists:', username);
             return res.status(400).json({ msg: 'User already exists' });
         }
 
+        console.log('Hashing password...');
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        await User.createUser({
+        console.log('Creating user...');
+        const createdUser = await User.createUser({
             username,
             password: hashedPassword,
             email,
@@ -26,17 +31,15 @@ exports.register = async (req, res) => {
             amount_achievements: 0
         });
 
-        const payload = { user: { id: user[0].user_id, username: user[0].username } };
+        console.log('User created successfully:', createdUser);
+        return res.status(201).json({ msg: 'User registered successfully. Please log in.' });
 
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-            if (err) throw err;
-            res.json({ token });
-        });
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
+        console.error('Server error during registration:', err.message);
+        return res.status(500).json({ error: 'Server error during registration' });
     }
 };
+
 
 exports.login = async (req, res) => {
     const { username, password } = req.body;
@@ -112,7 +115,9 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-    const { name, surname, email, password } = req.body;
+    console.log('Request user:', req.user);  // Add this line
+
+    const { name, surname, email, password, dietaryGoals } = req.body;
     const userId = req.user.id;
 
     try {
@@ -125,6 +130,7 @@ exports.updateProfile = async (req, res) => {
             name: name || user[0].name,
             surname: surname || user[0].surname,
             email: email || user[0].email,
+            dietary_goals: dietaryGoals || user[0].dietary_goals,
         };
 
         if (password) {

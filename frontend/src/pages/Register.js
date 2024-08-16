@@ -25,10 +25,17 @@ const Register = () => {
         country,
         role
       });
-      console.log(response.data);
       navigate('/login');
+      console.log(response.data);
+      
     } catch (error) {
-      console.error('Registration error', error);
+      if (error.response) {
+        console.error('Registration error:', error.response.data);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Error:', error.message);
+      }
     }
   };
 
