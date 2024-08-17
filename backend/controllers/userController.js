@@ -9,7 +9,6 @@ exports.register = async (req, res) => {
         if (user.length > 0) {
             return res.status(400).json({ msg: 'User already exists' });
         }
-
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -27,7 +26,6 @@ exports.register = async (req, res) => {
         });
 
         const payload = { user: { id: user[0].user_id, username: user[0].username } };
-
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5h' }, (err, token) => {
             if (err) throw err;
             res.json({ token });
@@ -114,7 +112,6 @@ exports.getUserById = async (req, res) => {
 exports.updateProfile = async (req, res) => {
     const { name, surname, email, password, dietaryGoals } = req.body;
     const userId = req.user.id;
-
     try {
         const user = await User.getUserById(userId);
         if (!user.length) {
@@ -128,7 +125,6 @@ exports.updateProfile = async (req, res) => {
             dietary_goals: dietaryGoals || user[0].dietary_goals,
         };
 
-        // Only update the password if a new one is provided
         if (password && password !== '********') {
             const salt = await bcrypt.genSalt(10);
             updatedUser.password = await bcrypt.hash(password, salt);
