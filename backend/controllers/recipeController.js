@@ -3,9 +3,9 @@ const fs = require('fs');
 const db = require('../config/db');
 
 exports.createRecipe = async (req, res) => {
-  const { user_id, title, instructions, date_created = new Date() } = req.body; 
+  const { user_id, title, instructions, category, date_created = new Date() } = req.body; 
   const image = req.file ? fs.readFileSync(req.file.path) : null;
-  if (!user_id || !title || !instructions) {
+  if (!user_id || !title || !instructions || !category) { 
     return res.status(400).json({ error: 'Required fields missing' });
   }
   
@@ -14,6 +14,7 @@ exports.createRecipe = async (req, res) => {
       user_id,
       title,
       instructions,
+      category, 
       date_created,
       image
     });

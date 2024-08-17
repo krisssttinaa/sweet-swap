@@ -20,10 +20,10 @@ Recipe.getRecipeById = (id) => {
 };
 
 Recipe.createRecipe = (recipeData) => {
-    const { title, instructions, user_id, date_created, image } = recipeData;
+    const { title, instructions, user_id, category, date_created, image } = recipeData; // Include category
     return conn.query(
-        'INSERT INTO Recipe (title, instructions, user_id, date_created, image) VALUES (?, ?, ?, ?, ?)',
-        [title, instructions, user_id, date_created, image]
+        'INSERT INTO Recipe (title, instructions, user_id, category, date_created, image) VALUES (?, ?, ?, ?, ?, ?)',
+        [title, instructions, user_id, category, date_created, image] // Include category
     )
         .then(([result]) => result)
         .catch((err) => {

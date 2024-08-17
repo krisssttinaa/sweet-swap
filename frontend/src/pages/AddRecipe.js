@@ -6,6 +6,7 @@ import './AddRecipe.css';
 const AddRecipe = () => {
   const [title, setTitle] = useState('');
   const [instructions, setInstructions] = useState('');
+  const [category, setCategory] = useState(''); // Add category state
   const [image, setImage] = useState(null);
   const navigate = useNavigate();  
 
@@ -16,6 +17,7 @@ const AddRecipe = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('instructions', instructions);
+    formData.append('category', category); // Append category to the formData
     formData.append('date_created', new Date().toISOString()); // Set current date as date_created
     if (image) formData.append('image', image);
     formData.append('user_id', userId); 
@@ -38,10 +40,11 @@ const AddRecipe = () => {
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
         <label>Instructions</label>
         <textarea value={instructions} onChange={(e) => setInstructions(e.target.value)} required />
+        <label>Category</label> {/* Add category input */}
+        <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required />
         <label>Image</label>
         <input type="file" onChange={(e) => setImage(e.target.files[0])} />
         <div className="button-group">
-          
           <button type="button" className="cancel-button" onClick={() => navigate(-1)}>Cancel</button>
           <button type="submit" className="add-recipe-button">Add Recipe</button>
         </div>

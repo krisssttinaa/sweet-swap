@@ -10,7 +10,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [country, setCountry] = useState('');
-  const [role] = useState('user');
+  const [showPassword, setShowPassword] = useState(false); // State for show password
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -23,7 +23,7 @@ const Register = () => {
         email,
         password,
         country,
-        role
+        role: 'user'
       });
       navigate('/login');
       console.log(response.data);
@@ -87,12 +87,21 @@ const Register = () => {
           <div className="form-group">
             <label htmlFor="password">Password:</label>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+          </div>
+          <div className="form-group show-password">
+            <input
+              type="checkbox"
+              id="showPassword"
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
+            />
+            <label htmlFor="showPassword">Show password</label>
           </div>
           <div className="form-group">
             <label htmlFor="country">Country:</label>

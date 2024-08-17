@@ -10,7 +10,7 @@ const Profile = ({ history }) => {
     name: '',
     surname: '',
     email: '',
-    password: '',
+    password: '', // Leave password empty initially
     dietaryGoals: '',
   });
 
@@ -31,8 +31,8 @@ const Profile = ({ history }) => {
           name: response.data.name,
           surname: response.data.surname,
           email: response.data.email,
-          password: '',
-          dietaryGoals: response.data.dietary_goals || '', // Updated this line to match the backend field name
+          password: '********', // Placeholder to indicate password exists
+          dietaryGoals: response.data.dietary_goals || '',
         });
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -72,13 +72,26 @@ const Profile = ({ history }) => {
 
   const handleSaveClick = async () => {
     const token = localStorage.getItem('token');
+    const updateData = {
+      name: formData.name,
+      surname: formData.surname,
+      email: formData.email,
+      dietaryGoals: formData.dietaryGoals,
+    };
+
+    // Only update the password if the field is changed from "********"
+    if (formData.password !== '********' && formData.password !== '') {
+      updateData.password = formData.password;
+    }
+
     try {
-      await axios.put('http://88.200.63.148:8288/api/users/profile', formData, {
+      await axios.put('http://88.200.63.148:8288/api/users/profile', updateData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser({
         ...user,
-        ...formData,
+        ...updateData,
+        dietary_goals: updateData.dietaryGoals,
       });
       setIsEditing(false);
     } catch (error) {
@@ -91,8 +104,8 @@ const Profile = ({ history }) => {
       name: user.name,
       surname: user.surname,
       email: user.email,
-      password: '',
-      dietaryGoals: user.dietary_goals || '', // Match backend field name
+      password: '********', // Reset to placeholder
+      dietaryGoals: user.dietary_goals || '',
     });
     setIsEditing(false);
   };
@@ -133,6 +146,7 @@ const Profile = ({ history }) => {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
+            placeholder="Enter new password or leave blank"
           />
           <label>Dietary Goals:</label>
           <textarea

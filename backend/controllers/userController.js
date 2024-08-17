@@ -5,20 +5,15 @@ const jwt = require('jsonwebtoken');
 exports.register = async (req, res) => {
     const { username, email, password, name, surname, country } = req.body;
     try {
-        console.log('Register request body:', req.body);
-
         let user = await User.authUser(username);
         if (user.length > 0) {
-            console.log('User already exists:', username);
             return res.status(400).json({ msg: 'User already exists' });
         }
 
-        console.log('Hashing password...');
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        console.log('Creating user...');
-        const createdUser = await User.createUser({
+        await User.createUser({
             username,
             password: hashedPassword,
             email,
@@ -31,15 +26,17 @@ exports.register = async (req, res) => {
             amount_achievements: 0
         });
 
-        console.log('User created successfully:', createdUser);
-        return res.status(201).json({ msg: 'User registered successfully. Please log in.' });
+        const payload = { user: { id: user[0].user_id, username: user[0].username } };
 
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5h' }, (err, token) => {
+            if (err) throw err;
+            res.json({ token });
+        });
     } catch (err) {
-        console.error('Server error during registration:', err.message);
-        return res.status(500).json({ error: 'Server error during registration' });
+        console.error(err.message);
+        res.status(500).send('Server error');
     }
 };
-
 
 exports.login = async (req, res) => {
     const { username, password } = req.body;
@@ -61,7 +58,7 @@ exports.login = async (req, res) => {
 
         const payload = { user: { id: user[0].user_id, username: user[0].username } };
 
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5h' }, (err, token) => {
             if (err) throw err;
             res.json({
                 token,
@@ -115,8 +112,6 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-    console.log('Request user:', req.user);  // Add this line
-
     const { name, surname, email, password, dietaryGoals } = req.body;
     const userId = req.user.id;
 
@@ -133,7 +128,8 @@ exports.updateProfile = async (req, res) => {
             dietary_goals: dietaryGoals || user[0].dietary_goals,
         };
 
-        if (password) {
+        // Only update the password if a new one is provided
+        if (password && password !== '********') {
             const salt = await bcrypt.genSalt(10);
             updatedUser.password = await bcrypt.hash(password, salt);
         }
@@ -141,7 +137,7 @@ exports.updateProfile = async (req, res) => {
         await User.updateUser(userId, updatedUser);
         res.json({ msg: 'Profile updated successfully' });
     } catch (err) {
-        console.error(err.message);
+        console.error('Error updating profile:', err);
         res.status(500).send('Server error');
     }
 };
