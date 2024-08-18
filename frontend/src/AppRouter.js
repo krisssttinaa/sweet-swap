@@ -13,6 +13,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Contact from './pages/Contact';
 import EditRecipe from './pages/EditRecipe';
+import UserProfile from './pages/UserProfile';
 
 const AppRouter = () => (
   <Router>
@@ -30,7 +31,7 @@ const AppRouter = () => (
       <Route path="/contact" element={<Contact />} />
       <Route path="/recipes/category/:category" element={<RecipeList />} />
       <Route path="/edit-recipe/:id" element={<EditRecipe />} />
-
+      <Route path="/user/:id" element={<UserProfile />} />
     </Routes>
     <Footer />
   </Router>
