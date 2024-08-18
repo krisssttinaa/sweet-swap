@@ -5,13 +5,12 @@ module.exports = function (req, res, next) {
 
     if (!token) {
         console.log('No token provided');
-        console.log(token);
         return res.status(401).json({ msg: 'No token, authorization denied' });
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        //console.log('Decoded JWT:', decoded);
+        console.log('Decoded JWT:', decoded);
         req.user = decoded.user;
 
         if (!req.user) {

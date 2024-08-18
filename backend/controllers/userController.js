@@ -25,7 +25,8 @@ exports.register = async (req, res) => {
             amount_achievements: 0
         });
 
-        const payload = { user: { id: user[0].user_id, username: user[0].username } };
+        let newUser = await User.authUser(username); // Fetch the newly created user
+        const payload = { user: { id: newUser[0].user_id, username: newUser[0].username } };
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5h' }, (err, token) => {
             if (err) throw err;
             res.json({ token });
@@ -68,8 +69,8 @@ exports.login = async (req, res) => {
                     surname: user[0].surname,
                 }
             });
+            console.log(token); // Moved inside the callback
         });
-        console.log(token);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -111,11 +112,8 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-    const { name, surname, email, password, dietaryGoals } = req.body;
+    const { name, surname, email, password, dietaryGoals, country } = req.body;
     const userId = req.user.id;
-
-    //console.log('Received data:', { name, surname, email, password, dietaryGoals });
-
     try {
         const user = await User.getUserById(userId);
         if (!user.length) {
@@ -127,14 +125,13 @@ exports.updateProfile = async (req, res) => {
             surname: surname || user[0].surname,
             email: email || user[0].email,
             dietary_goals: dietaryGoals || user[0].dietary_goals,
+            country: country || user[0].country, 
         };
 
         if (password && password !== '********') {
             const salt = await bcrypt.genSalt(10);
             updatedUser.password = await bcrypt.hash(password, salt);
         }
-
-        //console.log('Updating user with data:', updatedUser);
 
         await User.updateUser(userId, updatedUser);
         res.json({ msg: 'Profile updated successfully' });

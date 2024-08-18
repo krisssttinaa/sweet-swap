@@ -105,7 +105,8 @@ const RecipeDetails = () => {
   };
 
   const handleUsernameClick = () => {
-    navigate(`/user/${recipe.user_id}`); // Navigate to the user's profile page
+    const profilePath = userId === recipe.user_id.toString() ? '/profile' : `/user/${recipe.user_id}`;
+    navigate(profilePath); // Navigate to the appropriate profile page
   };
 
   if (!recipe) {
