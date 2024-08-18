@@ -69,6 +69,7 @@ exports.login = async (req, res) => {
                 }
             });
         });
+        console.log(token);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -112,6 +113,9 @@ exports.getUserById = async (req, res) => {
 exports.updateProfile = async (req, res) => {
     const { name, surname, email, password, dietaryGoals } = req.body;
     const userId = req.user.id;
+
+    //console.log('Received data:', { name, surname, email, password, dietaryGoals });
+
     try {
         const user = await User.getUserById(userId);
         if (!user.length) {
@@ -129,6 +133,8 @@ exports.updateProfile = async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             updatedUser.password = await bcrypt.hash(password, salt);
         }
+
+        //console.log('Updating user with data:', updatedUser);
 
         await User.updateUser(userId, updatedUser);
         res.json({ msg: 'Profile updated successfully' });

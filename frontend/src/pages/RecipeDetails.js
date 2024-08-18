@@ -9,7 +9,7 @@ const RecipeDetails = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false); // Track if the recipe is saved
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user'));
+  const userId = localStorage.getItem('user_id'); // Retrieve the user_id
   const token = localStorage.getItem('token'); // Retrieve the token
   const menuRef = useRef(null);
 
@@ -129,7 +129,7 @@ const RecipeDetails = () => {
         <h3>Instructions</h3>
         <p className='instructions-txt'>{recipe.instructions}</p>
       </div>
-      {user && token && (
+      {userId && token && (
         <div className="menu" onClick={toggleMenu} ref={menuRef}>
           <div className="burger-icon">
             <span></span>
@@ -138,8 +138,8 @@ const RecipeDetails = () => {
           </div>
           {menuOpen && (
             <div className="menu-options">
-              {user.user_id === recipe.user_id && <div onClick={handleEdit}>Edit</div>}
-              {user.user_id === recipe.user_id && <div onClick={handleDelete}>Delete</div>}
+              {userId === recipe.user_id.toString() && <div onClick={handleEdit}>Edit</div>}
+              {userId === recipe.user_id.toString() && <div onClick={handleDelete}>Delete</div>}
               {isSaved 
                 ? <div onClick={handleUnsave}>Unsave</div> 
                 : <div onClick={handleSave}>Save</div>

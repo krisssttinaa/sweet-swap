@@ -42,16 +42,16 @@ User.authUser = (username) => {
 };
 
 User.updateUser = (id, userData) => {
-    const { name, surname, email, password } = userData;
+    const { name, surname, email, password, dietary_goals } = userData;
     return conn.query(
-        'UPDATE User SET name = ?, surname = ?, email = ?, password = ? WHERE user_id = ?',
-        [name, surname, email, password, id]
+        'UPDATE User SET name = ?, surname = ?, email = ?, password = ?, dietary_goals = ? WHERE user_id = ?',
+        [name, surname, email, password, dietary_goals, id]
     )
-        .then(([result]) => result)
-        .catch((err) => {
-            console.error(`Error updating user with ID ${id}:`, err);
-            throw err;
-        });
+    .then(([result]) => result)
+    .catch((err) => {
+        console.error(`Error updating user with ID ${id}:`, err);
+        throw err;
+    });
 };
 
 module.exports = User;

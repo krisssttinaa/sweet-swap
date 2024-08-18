@@ -8,6 +8,7 @@ router.post('/create', auth, upload.single('image'), recipeController.createReci
 router.get('/', recipeController.getAllRecipes);
 router.get('/newest', recipeController.getNewestRecipes);
 router.get('/:id', recipeController.getRecipeById);
+router.put('/:id', auth, upload.single('image'), recipeController.updateRecipe);
 router.delete('/:id', auth, recipeController.deleteRecipe);
 router.get('/category/:category', recipeController.getRecipesByCategory);
 

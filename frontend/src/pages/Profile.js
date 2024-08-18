@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
 import './Profile.css';
 
 const Profile = ({ history }) => {
@@ -10,9 +11,11 @@ const Profile = ({ history }) => {
     name: '',
     surname: '',
     email: '',
-    password: '', // Leave password empty initially
+    password: '', 
     dietaryGoals: '',
   });
+
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -72,32 +75,40 @@ const Profile = ({ history }) => {
 
   const handleSaveClick = async () => {
     const token = localStorage.getItem('token');
-    const updateData = {
-      name: formData.name,
-      surname: formData.surname,
-      email: formData.email,
-      dietaryGoals: formData.dietaryGoals,
+    
+    let updatedPassword = user.password;
+    let updateData = {
+        name: formData.name,
+        surname: formData.surname,
+        email: formData.email,
+        dietaryGoals: formData.dietaryGoals,
     };
 
-    // Only update the password if the field is changed from "********"
-    if (formData.password !== '********' && formData.password !== '') {
-      updateData.password = formData.password;
+    if (formData.password !== '********' && formData.password.trim() !== '') {
+        updatedPassword = formData.password; 
     }
+    updateData.password = updatedPassword;
+
+    // Log the data before sending it
+    //console.log('Data to be sent to the backend:', updateData);
 
     try {
-      await axios.put('http://88.200.63.148:8288/api/users/profile', updateData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUser({
-        ...user,
-        ...updateData,
-        dietary_goals: updateData.dietaryGoals,
-      });
-      setIsEditing(false);
+        const response = await axios.put('http://88.200.63.148:8288/api/users/profile', updateData, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log('Response from backend:', response.data);
+
+        setUser({
+            ...user,
+            ...updateData,
+            dietary_goals: updateData.dietaryGoals,
+        });
+        setIsEditing(false);
     } catch (error) {
-      console.error('Error updating profile:', error);
+        console.error('Error updating profile:', error);
     }
-  };
+};
+
 
   const handleCancelClick = () => {
     setFormData({
@@ -108,6 +119,10 @@ const Profile = ({ history }) => {
       dietaryGoals: user.dietary_goals || '',
     });
     setIsEditing(false);
+  };
+
+  const handleRecipeClick = (id) => {
+    navigate(`/recipe/${id}`); // Navigate to the recipe details page
   };
 
   if (!user) {
@@ -177,10 +192,14 @@ const Profile = ({ history }) => {
           <p>No recipes found.</p>
         ) : (
           recipes.map((recipe) => (
-            <div key={recipe.recipe_id} className="recipe-item">
-              {recipe.image && (
+            <div
+              key={recipe.recipe_id}
+              className="recipe-item"
+              onClick={() => handleRecipeClick(recipe.recipe_id)} 
+            >
+              {recipe.image_filename && (
                 <img
-                  src={`data:image/jpeg;base64,${Buffer.from(recipe.image.data).toString('base64')}`}
+                  src={`http://88.200.63.148:8288/uploads/${recipe.image_filename}`}
                   alt={recipe.title}
                   className="recipe-image"
                 />

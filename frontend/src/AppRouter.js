@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Contact from './pages/Contact';
+import EditRecipe from './pages/EditRecipe';
 
 const AppRouter = () => (
   <Router>
@@ -28,6 +29,8 @@ const AppRouter = () => (
       <Route path="/profile" element={<Profile />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/recipes/category/:category" element={<RecipeList />} />
+      <Route path="/edit-recipe/:id" element={<EditRecipe />} />
+
     </Routes>
     <Footer />
   </Router>
