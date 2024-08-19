@@ -122,8 +122,7 @@ const Profile = () => {
     return <div>Loading...</div>;
   }
 
-  // Check if the profile belongs to the logged-in user
-  const isCurrentUser = user.user_id === parseInt(loggedInUserId);
+  const isCurrentUser = user.user_id === parseInt(loggedInUserId); // Check if the profile belongs to the logged-in user
 
   return (
     <div className="profile-page">

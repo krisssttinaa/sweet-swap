@@ -17,13 +17,11 @@ const Login = () => {
         username,
         password
       });
-  
-      console.log('API response:', response.data); // Add this line
+      //console.log('API response:', response.data); 
   
       const { token, user } = response.data;
-  
-      console.log('Token:', token); // Add this line
-      console.log('User:', user); // Add this line
+      //console.log('Token:', token); 
+      //console.log('User:', user); 
   
       if (token && user) {
         localStorage.setItem('token', token);
@@ -40,7 +38,6 @@ const Login = () => {
     }
   };
   
-
   return (
     <div className="login-container">
       <div className="login-card">

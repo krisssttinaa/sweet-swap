@@ -15,8 +15,7 @@ const AddRecipe = () => {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('user_id'); 
   
-    // Format the date without milliseconds and timezone
-    const formattedDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const formattedDate = new Date().toISOString().slice(0, 19).replace('T', ' '); // Format the date without milliseconds and timezone
   
     const formData = new FormData();
     formData.append('title', title);

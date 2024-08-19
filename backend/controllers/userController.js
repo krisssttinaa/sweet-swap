@@ -40,7 +40,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     const { username, password } = req.body;
     try {
-        console.log('Login endpoint hit');
+        //console.log('Login endpoint hit');
         let user = await User.authUser(username);
         if (user.length === 0) {
             console.log('User not found');
@@ -69,7 +69,7 @@ exports.login = async (req, res) => {
                     surname: user[0].surname,
                 }
             });
-            console.log(token); // Moved inside the callback
+            //console.log(token); // Moved inside the callback
         });
     } catch (err) {
         console.error(err.message);

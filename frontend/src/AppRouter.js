@@ -13,6 +13,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Contact from './pages/Contact';
 import EditRecipe from './pages/EditRecipe';
+import SearchResults from './components/SearchResults';
 
 const AppRouter = () => (
   <Router>
@@ -31,6 +32,7 @@ const AppRouter = () => (
       <Route path="/contact" element={<Contact />} />
       <Route path="/recipes/category/:category" element={<RecipeList />} />
       <Route path="/edit-recipe/:id" element={<EditRecipe />} />
+      <Route path="/search" element={<SearchResults />} />
     </Routes>
     <Footer />
   </Router>
