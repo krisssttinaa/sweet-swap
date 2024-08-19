@@ -23,6 +23,7 @@ app.use('/api/users', userRoutes);
 app.use('/api', contactRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+
 app.get("/", (req, res) => { // Home Route
     res.send("Welcome to Sweet Swap API");
 });

@@ -11,6 +11,7 @@ const Profile = () => {
   const [selectedPicture, setSelectedPicture] = useState('default.png');
   const [isPictureModalOpen, setIsPictureModalOpen] = useState(false);
   const [formData, setFormData] = useState({
+    username: '',  // Added username field
     name: '',
     surname: '',
     email: '',
@@ -39,10 +40,11 @@ const Profile = () => {
 
         if (!id) {
           setFormData({
+            username: response.data.username,  // Initialize the username
             name: response.data.name,
             surname: response.data.surname,
             email: response.data.email,
-            password: '********',
+            password: '********', // Use '********' as a placeholder to indicate password exists
             dietaryGoals: response.data.dietary_goals || '',
           });
         }
@@ -88,40 +90,51 @@ const Profile = () => {
 
   const handleSaveClick = async () => {
     const token = localStorage.getItem('token');
+  
+    // Prepare the data to be sent to the server
     const updateData = {
-        name: formData.name,
-        surname: formData.surname,
-        email: formData.email,
-        dietaryGoals: formData.dietaryGoals,
-        profilePicture: selectedPicture,  // Ensure this is being sent
+      username: formData.username,  // Include username in the update
+      name: formData.name,
+      surname: formData.surname,
+      email: formData.email,
+      dietaryGoals: formData.dietaryGoals,
+      profilePicture: selectedPicture,  // Ensure this is being sent
     };
-
-    if (formData.password !== '********' && formData.password !== '') {
-        updateData.password = formData.password;
+  
+    // Only include the password in the update if it has been changed from the placeholder
+    if (formData.password && formData.password !== '********') {
+      updateData.password = formData.password;
     }
 
     try {
-        await axios.put('http://88.200.63.148:8288/api/users/profile', updateData, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        setUser({
-            ...user,
-            ...updateData,
-            dietary_goals: updateData.dietaryGoals,
-            profile_picture: updateData.profilePicture, // Ensure this is updated locally
-        });
-        setIsEditing(false);
+      // Send the update request to the server
+      await axios.put('http://88.200.63.148:8288/api/users/profile', updateData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Update the local state to reflect the saved changes
+      setUser({
+        ...user,
+        ...updateData,
+        dietary_goals: updateData.dietaryGoals,
+        profile_picture: updateData.profilePicture,
+        password: user.password,  // Ensure the password is retained in the state
+      });
+
+      // Exit edit mode
+      setIsEditing(false);
     } catch (error) {
-        console.error('Error updating profile:', error);
+      console.error('Error updating profile:', error);
     }
-};
+  };
 
   const handleCancelClick = () => {
     setFormData({
+      username: user.username,
       name: user.name,
       surname: user.surname,
       email: user.email,
-      password: '********',
+      password: '********', // Reset to placeholder
       dietaryGoals: user.dietary_goals || '',
     });
     setSelectedPicture(user.profile_picture || 'default.png');
@@ -147,6 +160,13 @@ const Profile = () => {
       <h2>{isCurrentUser ? 'Profile' : `${user.username}'s Profile`}</h2>
       {isCurrentUser && isEditing ? (
         <div className="edit-form">
+          <label>Username:</label>  {/* Added field for editing username */}
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleInputChange}
+          />
           <label>Name:</label>
           <input
             type="text"
@@ -206,6 +226,7 @@ const Profile = () => {
             alt="Profile"
             className="profile-picture"
           />
+          <p><strong>Username:</strong> {user.username}</p> {/* Display the username */}
           <p><strong>Name:</strong> {user.name}</p>
           <p><strong>Surname:</strong> {user.surname}</p>
           <p><strong>Email:</strong> {user.email}</p>
@@ -244,8 +265,8 @@ const Profile = () => {
       {isPictureModalOpen && (
         <div className="picture-modal">
           <div className="picture-grid">
-            {['profile1.png', 'profile2.png', 'profile3.png', 'profile4.png', 'profile5.png', 'profile6.png', 
-            'profile7.png', 'profile8.png', 'profile9.png', 'profile10.png', 'profile11.png', 'profile12.png'].map((pic) => (
+            {['default.png', 'profile0.png', 'profile1.png', 'profile2.png', 'profile3.png', 'profile4.png', 'profile5.png', 'profile6.png', 
+            'profile7.png', 'profile8.png', 'profile9.png', 'profile10.png', 'profile11.png', 'profile12.png', 'profile13.png', 'profile14.png'].map((pic) => (
               <img 
                 key={pic} 
                 src={`http://88.200.63.148:8288/uploads/${pic}`} 
