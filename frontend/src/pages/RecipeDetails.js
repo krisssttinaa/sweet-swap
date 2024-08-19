@@ -18,9 +18,9 @@ const RecipeDetails = () => {
     const token = localStorage.getItem('token');
     const menuRef = useRef(null);
 
-    console.log('Recipe ID:', id);
-    console.log('User ID:', userId);
-    console.log('Token:', token);
+    //console.log('Recipe ID:', id);
+    //console.log('User ID:', userId);
+    //console.log('Token:', token);
 
     const fetchComments = useCallback(async () => {
         console.log('Attempting to fetch comments for recipe ID:', id);

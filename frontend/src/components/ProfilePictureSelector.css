@@ -1,0 +1,19 @@
+.profile-picture-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.profile-picture {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border 0.3s ease;
+}
+
+.profile-picture.selected {
+    border-color: #4caf50;
+}
