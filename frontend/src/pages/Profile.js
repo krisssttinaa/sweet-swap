@@ -91,24 +91,21 @@ const Profile = () => {
   const handleSaveClick = async () => {
     const token = localStorage.getItem('token');
   
-    // Prepare the data to be sent to the server
-    const updateData = {
-      username: formData.username,  // Include username in the update
+    const updateData = {  // Prepare the data to be sent to the server
+      username: formData.username, 
       name: formData.name,
       surname: formData.surname,
       email: formData.email,
       dietaryGoals: formData.dietaryGoals,
-      profilePicture: selectedPicture,  // Ensure this is being sent
+      profilePicture: selectedPicture,  
     };
-  
-    // Only include the password in the update if it has been changed from the placeholder
+
     if (formData.password && formData.password !== '********') {
       updateData.password = formData.password;
     }
 
     try {
-      // Send the update request to the server
-      await axios.put('http://88.200.63.148:8288/api/users/profile', updateData, {
+      await axios.put('http://88.200.63.148:8288/api/users/profile', updateData, {  // Send the update request to the server
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -121,7 +118,6 @@ const Profile = () => {
         password: user.password,  // Ensure the password is retained in the state
       });
 
-      // Exit edit mode
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -134,7 +130,7 @@ const Profile = () => {
       name: user.name,
       surname: user.surname,
       email: user.email,
-      password: '********', // Reset to placeholder
+      password: '********',
       dietaryGoals: user.dietary_goals || '',
     });
     setSelectedPicture(user.profile_picture || 'default.png');
@@ -160,7 +156,7 @@ const Profile = () => {
       <h2>{isCurrentUser ? 'Profile' : `${user.username}'s Profile`}</h2>
       {isCurrentUser && isEditing ? (
         <div className="edit-form">
-          <label>Username:</label>  {/* Added field for editing username */}
+          <label>Username:</label>  {}
           <input
             type="text"
             name="username"
@@ -224,7 +220,7 @@ const Profile = () => {
           <img 
             src={`http://88.200.63.148:8288/uploads/${user.profile_picture || 'default.png'}`} 
             alt="Profile"
-            className="profile-picture"
+            className="profile-pic"
           />
           <p><strong>Username:</strong> {user.username}</p> {/* Display the username */}
           <p><strong>Name:</strong> {user.name}</p>
@@ -277,7 +273,7 @@ const Profile = () => {
             ))}
           </div>
           <div className="modal-actions">
-            <button onClick={closePictureModal}>Close</button>
+            <button onClick={closePictureModal} className='close'>Close</button>
             <button onClick={closePictureModal} className="save">Save Selection</button>
           </div>
         </div>
