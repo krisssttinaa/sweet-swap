@@ -9,6 +9,7 @@ router.get('/profile', auth, userController.profile);
 router.put('/profile', auth, userController.updateProfile);
 router.get('/all', userController.getAllUsers);
 router.get('/:id', userController.getUserById);
+router.delete('/profile', auth, userController.deleteProfile);
 
 router.put('/profile-picture', auth, async (req, res) => {
     const userId = req.user.id; // Assuming auth middleware sets req.user

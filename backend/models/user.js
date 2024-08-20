@@ -54,4 +54,14 @@ User.updateUser = (id, userData) => {
     });
 };
 
+User.deleteUser = (id) => {
+    return conn.query('DELETE FROM User WHERE user_id = ?', [id])
+        .then(([result]) => result)
+        .catch((err) => {
+            console.error(`Error deleting user with ID ${id}:`, err);
+            throw err;
+        });
+};
+
+
 module.exports = User;

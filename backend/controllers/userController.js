@@ -142,3 +142,20 @@ exports.updateProfile = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
+
+exports.deleteProfile = async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const user = await User.getUserById(userId);
+        if (!user.length) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        await User.deleteUser(userId); // Assuming you will add this method in your User model
+        res.status(200).json({ msg: 'User deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting user profile:', err);
+        res.status(500).send('Server error');
+    }
+};

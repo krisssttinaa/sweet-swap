@@ -233,51 +233,58 @@ const RecipeDetails = () => {
                 <p className="instructions-txt">{recipe.instructions}</p>
 
                 <h3>Comments</h3>
-                <div className="comments-section">
-                    {comments.length > 0 ? (
-                        comments.map((comment, index) => (
-                            <div key={comment.comment_id || index} className="comment">
-                                <img src={`http://88.200.63.148:8288/uploads/${comment.profile_picture}`} alt={comment.username} className="profile-picture" />
-                                {editingCommentId === comment.comment_id ? (
-                                    <div>
-                                        <textarea
-                                            value={editContent}
-                                            onChange={(e) => setEditContent(e.target.value)}
-                                        />
-                                        <button onClick={handleUpdateComment}>Update</button>
-                                        <button onClick={() => setEditingCommentId(null)}>Cancel</button>
-                                    </div>
-                                ) : (
-                                    <>
-                                        <p>{comment.username}: {comment.content}</p>
-                                        <div className='comments-details'>
-                                            <small>
-                                                Commented on: {comment.date_commented ? new Date(comment.date_commented).toLocaleString() : 'Date not available'}
-                                            </small>
-                                            {comment.user_id === parseInt(userId) && (
-                                                <div className='comments-buttons-change'>
-                                                    <button onClick={() => handleEditComment(comment.comment_id, comment.content)}>Edit</button>
-                                                    <button onClick={() => handleDeleteComment(comment.comment_id)}>Delete</button>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        ))
-                    ) : (
-                        <p>No comments yet.</p>
-                    )}
-                    <div className="add-comment">
-                        <textarea
-                            value={newComment}
-                            onChange={handleNewCommentChange}
-                            placeholder="Add a comment..."
-                            rows="3"
-                        />
-                        <button onClick={handleCommentSubmit}>Submit</button>
-                    </div>
-                </div>
+                              <div className="comments-section">
+                  {comments.length > 0 ? (
+                      comments.map((comment, index) => (
+                          <div key={comment.comment_id || index} className="comment">
+                              <img src={`http://88.200.63.148:8288/uploads/${comment.profile_picture}`} alt={comment.username} className="profile-picture" />
+                              {editingCommentId === comment.comment_id ? (
+                                  <div>
+                                      <textarea
+                                          value={editContent}
+                                          onChange={(e) => setEditContent(e.target.value)}
+                                      />
+                                      <button onClick={handleUpdateComment}>Update</button>
+                                      <button onClick={() => setEditingCommentId(null)}>Cancel</button>
+                                  </div>
+                              ) : (
+                                  <>
+                                      <p>
+                                          <span 
+                                              onClick={() => handleUsernameClick(comment.user_id)} 
+                                              className="username clickable-username"
+                                          >
+                                              {comment.username}
+                                          </span>: {comment.content}
+                                      </p>
+                                      <div className='comments-details'>
+                                          <small>
+                                              Commented on: {comment.date_commented ? new Date(comment.date_commented).toLocaleString() : 'Date not available'}
+                                          </small>
+                                          {comment.user_id === parseInt(userId) && (
+                                              <div className='comments-buttons-change'>
+                                                  <button onClick={() => handleEditComment(comment.comment_id, comment.content)}>Edit</button>
+                                                  <button onClick={() => handleDeleteComment(comment.comment_id)}>Delete</button>
+                                              </div>
+                                          )}
+                                      </div>
+                                  </>
+                              )}
+                          </div>
+                      ))
+                  ) : (
+                      <p>No comments yet.</p>
+                  )}
+                  <div className="add-comment">
+                      <textarea
+                          value={newComment}
+                          onChange={handleNewCommentChange}
+                          placeholder="Add a comment..."
+                          rows="3"
+                      />
+                      <button onClick={handleCommentSubmit}>Submit</button>
+                  </div>
+              </div>
             </div>
             {userId && token && (
                 <div className="menu" onClick={toggleMenu} ref={menuRef}>

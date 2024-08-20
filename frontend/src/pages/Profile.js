@@ -11,7 +11,7 @@ const Profile = () => {
   const [selectedPicture, setSelectedPicture] = useState('default.png');
   const [isPictureModalOpen, setIsPictureModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    username: '',  // Added username field
+    username: '',  
     name: '',
     surname: '',
     email: '',
@@ -40,11 +40,11 @@ const Profile = () => {
 
         if (!id) {
           setFormData({
-            username: response.data.username,  // Initialize the username
+            username: response.data.username,  
             name: response.data.name,
             surname: response.data.surname,
             email: response.data.email,
-            password: '********', // Use '********' as a placeholder to indicate password exists
+            password: '********', 
             dietaryGoals: response.data.dietary_goals || '',
           });
         }
@@ -91,7 +91,7 @@ const Profile = () => {
   const handleSaveClick = async () => {
     const token = localStorage.getItem('token');
   
-    const updateData = {  // Prepare the data to be sent to the server
+    const updateData = {  
       username: formData.username, 
       name: formData.name,
       surname: formData.surname,
@@ -105,17 +105,16 @@ const Profile = () => {
     }
 
     try {
-      await axios.put('http://88.200.63.148:8288/api/users/profile', updateData, {  // Send the update request to the server
+      await axios.put('http://88.200.63.148:8288/api/users/profile', updateData, {  
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Update the local state to reflect the saved changes
       setUser({
         ...user,
         ...updateData,
         dietary_goals: updateData.dietaryGoals,
         profile_picture: updateData.profilePicture,
-        password: user.password,  // Ensure the password is retained in the state
+        password: user.password,  
       });
 
       setIsEditing(false);
@@ -137,6 +136,22 @@ const Profile = () => {
     setIsEditing(false);
   };
 
+  const handleDeleteClick = async () => {
+    const token = localStorage.getItem('token');
+    
+    try {
+      await axios.delete(`http://88.200.63.148:8288/api/users/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      // Clear user data and navigate to login
+      localStorage.clear();
+      navigate('/login');
+    } catch (error) {
+      console.error('Error deleting profile:', error);
+    }
+  };
+
   const openPictureModal = () => {
     setIsPictureModalOpen(true);
   };
@@ -156,7 +171,7 @@ const Profile = () => {
       <h2>{isCurrentUser ? 'Profile' : `${user.username}'s Profile`}</h2>
       {isCurrentUser && isEditing ? (
         <div className="edit-form">
-          <label>Username:</label>  {}
+          <label>Username:</label>
           <input
             type="text"
             name="username"
@@ -211,8 +226,12 @@ const Profile = () => {
           />
 
           <div className="button-group">
+          <div className="button-grouppp">
             <button className="save" onClick={handleSaveClick}>Save</button>
             <button className="cancel" onClick={handleCancelClick}>Cancel</button>
+            </div>
+            <button className="delete" onClick={handleDeleteClick}>Delete Account</button> {/* New delete button */}
+            
           </div>
         </div>
       ) : (
@@ -222,7 +241,7 @@ const Profile = () => {
             alt="Profile"
             className="profile-pic"
           />
-          <p><strong>Username:</strong> {user.username}</p> {/* Display the username */}
+          <p><strong>Username:</strong> {user.username}</p> 
           <p><strong>Name:</strong> {user.name}</p>
           <p><strong>Surname:</strong> {user.surname}</p>
           <p><strong>Email:</strong> {user.email}</p>
