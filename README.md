@@ -16,7 +16,7 @@ Sweet Swap is a web application developed as part of the Systems III project. Th
   - bcryptjs for password hashing
   - cors for handling Cross-Origin Resource Sharing
   - multer for file uploads
-  - nodemailer for sending emails
+  - (nodemailer for sending emails)
 
 - **Database:**
   - MySQL
